@@ -41,10 +41,11 @@ python app.py
 
 ## Images
 
-![Alt text](path/to/Screenshot (2).png)
+![Alt text](path/to/image1.jpg)
 
 
-![Alt text](path/to/Screenshot (3).png)
+![Alt text](path/to/image2.jpg)
+---
 ## User Interface
 
 The application features a modern, responsive dashboard with six analytical tabs:
