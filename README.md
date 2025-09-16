@@ -1,3 +1,14 @@
+---
+title: EthGuard
+emoji: 🛡️
+colorFrom: green
+colorTo: black
+sdk: docker
+app_port: 5000
+pinned: false
+---
+
+
 # EthGuard
 
 A machine learning-powered web application that evaluates the fraud risk of Ethereum addresses by analyzing transaction behavior, network patterns, and blockchain interactions. EthGuard provides a comprehensive fraud detection framework for cryptocurrency transaction analysis.
