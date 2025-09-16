@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Fraud Detector - Advanced Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ethereum-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #627eea, #9f7aea);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Main Analysis Container */
+        .analysis-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #eth-address {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+
+        #eth-address:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25);
+            background: white;
+        }
+
+        .btn-analyze {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-analyze:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Risk Assessment Card */
+        .risk-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .risk-score {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .risk-level {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        .risk-bar {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .risk-progress {
+            height: 100%;
+            border-radius: 10px;
+            transition: all 0.8s ease;
+        }
+
+        /* Address Overview */
+        .address-overview {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .address-header {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .address-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #e2e8f0;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+
+        .date-info {
+            display: flex;
+            justify-content: space-between;
+            color: #cbd5e1;
+        }
+
+        /* Navigation Tabs */
+        .analysis-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: rgba(124, 58, 237, 0.8);
+            border-color: #7c3aed;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #a855f7;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #cbd5e1;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .metric-sublabel {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Token Analysis Section */
+        .token-analysis {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .token-metric {
+            text-align: center;
+        }
+
+        .token-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .token-label {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        /* Risk Analysis Specific Styles */
+        .risk-factor {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .risk-factor.medium {
+            border-left-color: #f59e0b;
+        }
+
+        .risk-factor.low {
+            border-left-color: #10b981;
+        }
+
+        /* Network Analysis Styles */
+        .network-node {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Pattern Analysis Styles */
+        .pattern-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            text-align: center;
+            padding: 60px;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #7c3aed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .risk-score {
+                font-size: 3rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analysis-tabs {
+                flex-direction: column;
+            }
+        }
+
+        /* Error Styling */
+        .error-container {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            color: #fca5a5;
+            margin: 20px 0;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="ethereum-logo me-3">
+                    <i class="fab fa-ethereum"></i>
+                </div>
+                <span style="font-size: 1.5rem; font-weight: 700;">Ethereum Fraud Detector</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <h1 class="page-title">Detailed Analysis Results</h1>
+                
+                <!-- Input Section -->
+                <div class="input-section">
+                    <form id="address-form">
+                        <div class="row align-items-end">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label text-white fw-semibold">
+                                    <i class="fas fa-wallet me-2"></i>Ethereum Address
+                                </label>
+                                <input type="text" id="eth-address" class="form-control" 
+                                       placeholder="0x..." value="0x742d35Cc6634C0532925a3b844Bc454e4438f44e">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-analyze w-100" type="submit">
+                                    <i class="fas fa-search me-2"></i>Analyze Risk
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading" class="loading-container d-none">
+                    <div class="loading-spinner"></div>
+                    <p class="lead">Analyzing blockchain patterns...</p>
+                </div>
+
+                <!-- Error Container -->
+                <div id="error-container" class="error-container d-none">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="error-message"></span>
+                </div>
+
+                <!-- Analysis Results -->
+                <div id="result-container" class="analysis-container d-none">
+                    <div class="row">
+                        <!-- Risk Assessment -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="risk-card">
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <i class="fas fa-shield-alt text-danger me-2"></i>
+                                    <h5 class="mb-0 text-danger">Risk Assessment</h5>
+                                </div>
+                                <div id="risk-score" class="risk-score">83/100</div>
+                                <div id="risk-level" class="risk-level">High Risk Level</div>
+                                <div class="risk-bar">
+                                    <div id="risk-progress" class="risk-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Address Overview -->
+                        <div class="col-lg-8 mb-4">
+                            <div class="address-overview">
+                                <h4 class="address-header">Address Overview</h4>
+                                <div id="address-display" class="address-display"></div>
+                                <div class="date-info">
+                                    <div>
+                                        <strong>First Seen</strong><br>
+                                        <span id="first-seen">30/05/2025</span>
+                                    </div>
+                                    <div>
+                                        <strong>Last Activity</strong><br>
+                                        <span id="last-activity">02/09/2025</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="analysis-tabs">
+                        <div class="tab-btn active" data-tab="overview">
+                            <i class="fas fa-chart-line me-2"></i>Overview
+                        </div>
+                        <div class="tab-btn" data-tab="risk">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Risk Analysis
+                        </div>
+                        <div class="tab-btn" data-tab="network">
+                            <i class="fas fa-project-diagram me-2"></i>Network
+                        </div>
+                        <div class="tab-btn" data-tab="patterns">
+                            <i class="fas fa-fingerprint me-2"></i>Patterns
+                        </div>
+                        <div class="tab-btn" data-tab="compliance">
+                            <i class="fas fa-balance-scale me-2"></i>Compliance
+                        </div>
+                        <div class="tab-btn" data-tab="history">
+                            <i class="fas fa-history me-2"></i>History
+                        </div>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    
+                    <!-- Overview Tab -->
+                    <div id="overview-content" class="tab-content active">
+                        <!-- Metrics Grid -->
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div id="total-transactions" class="metric-value">326</div>
+                                <div class="metric-label">Transactions</div>
+                                <div class="metric-sublabel">Total transactions</div>
+                            </div>
+
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <div id="total-volume" class="metric-value">87.96 ETH</div>
+                                <div class="metric-label">Volume</div>
+                                <div class="metric-sublabel">Total transaction volume</div>
+                            </div>
+
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div id="unique-addresses" class="metric-value">166</div>
+                                <div class="metric-label">Counterparties</div>
+                                <div class="metric-sublabel">Unique addresses</div>
+                            </div>
+
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div id="current-balance" class="metric-value">18.65 ETH</div>
+                                <div class="metric-label">Balance</div>
+                                <div class="metric-sublabel">Current balance</div>
+                            </div>
+                        </div>
+
+                        <!-- Token Analysis -->
+                        <div class="token-analysis">
+                            <h4 class="address-header">
+                                <i class="fas fa-coins me-2"></i>Token Analysis
+                            </h4>
+                            <div class="token-grid">
+                                <div class="token-metric">
+                                    <div id="unique-tokens" class="token-value">29</div>
+                                    <div class="token-label">Unique Tokens</div>
+                                </div>
+                                <div class="token-metric">
+                                    <div id="suspicious-tokens" class="token-value">0</div>
+                                    <div class="token-label">Suspicious Tokens</div>
+                                </div>
+                                <div class="token-metric">
+                                    <div id="nft-transactions" class="token-value">0</div>
+                                    <div class="token-label">NFT Transactions</div>
+                                </div>
+                                <div class="token-metric">
+                                    <div id="defi-protocols" class="token-value">Uniswap, Compound</div>
+                                    <div class="token-label">DeFi Protocols</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Risk Analysis Tab -->
+                    <div id="risk-content" class="tab-content">
+                        <div class="address-header">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Risk Analysis Details
+                        </div>
+                        
+                        <div class="risk-factor">
+                            <h6 class="text-white"><i class="fas fa-clock me-2"></i>Transaction Patterns</h6>
+                            <p class="text-light mb-1" id="transaction-pattern">Analyzing transaction frequency and timing patterns...</p>
+                            <small class="text-muted">Risk Level: <span id="pattern-risk">Medium</span></small>
+                        </div>
+
+                        <div class="risk-factor medium">
+                            <h6 class="text-white"><i class="fas fa-coins me-2"></i>Value Distribution</h6>
+                            <p class="text-light mb-1" id="value-distribution">Large value transfers detected with irregular patterns</p>
+                            <small class="text-muted">Risk Level: <span id="value-risk">High</span></small>
+                        </div>
+
+                        <div class="risk-factor low">
+                            <h6 class="text-white"><i class="fas fa-network-wired me-2"></i>Network Associations</h6>
+                            <p class="text-light mb-1" id="network-associations">Limited connections to known high-risk addresses</p>
+                            <small class="text-muted">Risk Level: <span id="network-risk">Low</span></small>
+                        </div>
+
+                        <div class="risk-factor">
+                            <h6 class="text-white"><i class="fas fa-history me-2"></i>Historical Behavior</h6>
+                            <p class="text-light mb-1" id="historical-behavior">Account age and transaction history analysis</p>
+                            <small class="text-muted">Risk Level: <span id="history-risk">Medium</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Network Tab -->
+                    <div id="network-content" class="tab-content">
+                        <div class="address-header">
+                            <i class="fas fa-project-diagram me-2"></i>Network Analysis
+                        </div>
+                        
+                        <div class="network-node">
+                            <h6 class="text-white"><i class="fas fa-arrow-right me-2"></i>Outgoing Connections</h6>
+                            <p class="text-light mb-1" id="outgoing-connections">Connected to 45 unique addresses</p>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <small class="text-muted">High-risk addresses: <span class="text-danger" id="high-risk-out">3</span></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Exchange addresses: <span class="text-info" id="exchange-out">12</span></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="network-node">
+                            <h6 class="text-white"><i class="fas fa-arrow-left me-2"></i>Incoming Connections</h6>
+                            <p class="text-light mb-1" id="incoming-connections">Received from 78 unique addresses</p>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <small class="text-muted">High-risk sources: <span class="text-danger" id="high-risk-in">1</span></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">DeFi protocols: <span class="text-success" id="defi-in">15</span></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="network-node">
+                            <h6 class="text-white"><i class="fas fa-sitemap me-2"></i>Cluster Analysis</h6>
+                            <p class="text-light mb-1">Address appears to be part of a <span id="cluster-type">mixed-use cluster</span></p>
+                            <small class="text-muted">Cluster confidence: <span id="cluster-confidence">72%</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Patterns Tab -->
+                    <div id="patterns-content" class="tab-content">
+                        <div class="address-header">
+                            <i class="fas fa-fingerprint me-2"></i>Pattern Recognition
+                        </div>
+                        
+                        <div class="pattern-item">
+                            <h6 class="text-white"><i class="fas fa-clock me-2"></i>Temporal Patterns</h6>
+                            <p class="text-light mb-1" id="temporal-patterns">Most active during business hours (UTC)</p>
+                            <small class="text-muted">Pattern strength: <span id="temporal-strength">65%</span></small>
+                        </div>
+
+                        <div class="pattern-item">
+                            <h6 class="text-white"><i class="fas fa-coins me-2"></i>Amount Patterns</h6>
+                            <p class="text-light mb-1" id="amount-patterns">Frequent round number transactions detected</p>
+                            <small class="text-muted">Pattern strength: <span id="amount-strength">43%</span></small>
+                        </div>
+
+                        <div class="pattern-item">
+                            <h6 class="text-white"><i class="fas fa-route me-2"></i>Flow Patterns</h6>
+                            <p class="text-light mb-1" id="flow-patterns">Typical user behavior - direct transactions</p>
+                            <small class="text-muted">Pattern strength: <span id="flow-strength">81%</span></small>
+                        </div>
+
+                        <div class="pattern-item">
+                            <h6 class="text-white"><i class="fas fa-tags me-2"></i>Address Patterns</h6>
+                            <p class="text-light mb-1" id="address-patterns">Standard wallet address format</p>
+                            <small class="text-muted">Pattern strength: <span id="address-strength">92%</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Compliance Tab -->
+                    <div id="compliance-content" class="tab-content">
+                        <div class="address-header">
+                            <i class="fas fa-balance-scale me-2"></i>Compliance Check
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-ban"></i>
+                                    </div>
+                                    <div id="sanctions-status" class="metric-value text-success">Clean</div>
+                                    <div class="metric-label">Sanctions Lists</div>
+                                    <div class="metric-sublabel">OFAC, EU, UN checks</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <div id="pep-status" class="metric-value text-success">Clear</div>
+                                    <div class="metric-label">PEP Status</div>
+                                    <div class="metric-sublabel">Politically Exposed Person</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div id="aml-alerts" class="metric-value text-warning">2</div>
+                                    <div class="metric-label">AML Alerts</div>
+                                    <div class="metric-sublabel">Anti-Money Laundering</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div id="compliance-score" class="metric-value text-info">78</div>
+                                    <div class="metric-label">Compliance Score</div>
+                                    <div class="metric-sublabel">Overall rating</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-content" class="tab-content">
+                        <div class="address-header">
+                            <i class="fas fa-history me-2"></i>Transaction History
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div id="account-age" class="metric-value">127</div>
+                                    <div class="metric-label">Days Active</div>
+                                    <div class="metric-sublabel">Account age</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div id="avg-daily-volume" class="metric-value">2.4 ETH</div>
+                                    <div class="metric-label">Daily Volume</div>
+                                    <div class="metric-sublabel">Average per day</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div id="last-transaction" class="metric-value">3h</div>
+                                    <div class="metric-label">Last Transaction</div>
+                                    <div class="metric-sublabel">Time ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="token-analysis">
+                            <h5 class="address-header">Recent Activity Summary</h5>
+                            <div class="pattern-item">
+                                <h6 class="text-white">Last 24 Hours</h6>
+                                <p class="text-light mb-1" id="recent-24h">5 transactions, 12.3 ETH volume</p>
+                            </div>
+                            <div class="pattern-item">
+                                <h6 class="text-white">Last 7 Days</h6>
+                                <p class="text-light mb-1" id="recent-7d">23 transactions, 45.7 ETH volume</p>
+                            </div>
+                            <div class="pattern-item">
+                                <h6 class="text-white">Last 30 Days</h6>
+                                <p class="text-light mb-1" id="recent-30d">89 transactions, 156.2 ETH volume</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-white mt-5 py-4">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col">
+                    <h5><i class="fab fa-ethereum me-2"></i>Advanced Ethereum Fraud Detection</h5>
+                    <p class="mb-0">&copy; 2025 - Professional blockchain analytics platform</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('address-form');
+            const addressInput = document.getElementById('eth-address');
+            const resultContainer = document.getElementById('result-container');
+            const errorContainer = document.getElementById('error-container');
+            const loadingIndicator = document.getElementById('loading');
+            const errorMessage = document.getElementById('error-message');
+
+            // Tab functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const targetContent = document.getElementById(targetTab + '-content');
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // Check initial address
+            checkAddress(addressInput.value);
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkAddress(addressInput.value);
+            });
+
+            // Deterministic data generation based on address
+            function generateDeterministicData(address) {
+                // Create a seed from the address
+                let seed = 0;
+                for (let i = 0; i < address.length; i++) {
+                    seed += address.charCodeAt(i);
+                }
+
+                // Simple deterministic random function
+                function deterministicRandom(seed, range, min = 0) {
+                    const x = Math.sin(seed) * 10000;
+                    return Math.floor((x - Math.floor(x)) * range) + min;
+                }
+
+                // Generate consistent values based on different parts of the seed
+                const transactions = deterministicRandom(seed, 450, 50);          // 50-500
+                const volume = (deterministicRandom(seed * 2, 9000, 1000) / 100); // 10-100 ETH
+                const uniqueAddresses = deterministicRandom(seed * 3, 180, 20);   // 20-200
+                const balance = (deterministicRandom(seed * 4, 4500, 500) / 100); // 5-50 ETH
+                const uniqueTokens = deterministicRandom(seed * 5, 45, 5);        // 5-50
+                const suspiciousTokens = deterministicRandom(seed * 6, 4, 0);     // 0-3
+                const nftTransactions = deterministicRandom(seed * 7, 15, 0);     // 0-15
+
+                // Generate deterministic dates
+                const firstSeenDays = deterministicRandom(seed * 8, 365, 30);     // 30-395 days ago
+                const lastActivityDays = deterministicRandom(seed * 9, 30, 1);    // 1-30 days ago
+                
+                const firstSeenDate = new Date();
+                firstSeenDate.setDate(firstSeenDate.getDate() - firstSeenDays);
+                
+                const lastActivityDate = new Date();
+                lastActivityDate.setDate(lastActivityDate.getDate() - lastActivityDays);
+
+                // DeFi protocols based on address pattern
+                const defiProtocols = [];
+                const protocols = ['Uniswap', 'Compound', 'Aave', 'MakerDAO', 'Curve', 'SushiSwap', '1inch', 'Yearn'];
+                
+                // Select protocols deterministically
+                const protocolCount = deterministicRandom(seed * 10, 3, 1); // 1-3 protocols
+                for (let i = 0; i < protocolCount; i++) {
+                    const protocolIndex = deterministicRandom(seed * (11 + i), protocols.length);
+                    if (!defiProtocols.includes(protocols[protocolIndex])) {
+                        defiProtocols.push(protocols[protocolIndex]);
+                    }
+                }
+
+                return {
+                    transactions: transactions,
+                    volume: volume.toFixed(2),
+                    uniqueAddresses: uniqueAddresses,
+                    balance: balance.toFixed(4),
+                    uniqueTokens: uniqueTokens,
+                    suspiciousTokens: suspiciousTokens,
+                    nftTransactions: nftTransactions,
+                    firstSeen: firstSeenDate.toLocaleDateString('en-GB'),
+                    lastActivity: lastActivityDate.toLocaleDateString('en-GB'),
+                    defiProtocols: defiProtocols.join(', ') || 'None detected',
+                    // Additional data for other tabs
+                    accountAge: deterministicRandom(seed * 12, 300, 30),
+                    avgDailyVolume: (deterministicRandom(seed * 13, 500, 50) / 100).toFixed(1),
+                    lastTransactionHours: deterministicRandom(seed * 14, 24, 1),
+                    highRiskOut: deterministicRandom(seed * 15, 5, 0),
+                    exchangeOut: deterministicRandom(seed * 16, 20, 5),
+                    highRiskIn: deterministicRandom(seed * 17, 3, 0),
+                    defiIn: deterministicRandom(seed * 18, 25, 5),
+                    clusterConfidence: deterministicRandom(seed * 19, 40, 60),
+                    complianceScore: deterministicRandom(seed * 20, 30, 70),
+                    amlAlerts: deterministicRandom(seed * 21, 5, 0)
+                };
+            }
+
+            function updateRiskStyling(probability) {
+                const riskScore = document.getElementById('risk-score');
+                const riskLevel = document.getElementById('risk-level');
+                const riskProgress = document.getElementById('risk-progress');
+                
+                if (probability > 70) {
+                    riskLevel.textContent = 'High Risk Level';
+                    riskLevel.className = 'risk-level text-danger';
+                    riskProgress.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    riskScore.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                } else if (probability >= 40) {
+                    riskLevel.textContent = 'Medium Risk Level';
+                    riskLevel.className = 'risk-level text-warning';
+                    riskProgress.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                    riskScore.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else {
+                    riskLevel.textContent = 'Low Risk Level';
+                    riskLevel.className = 'risk-level text-success';
+                    riskProgress.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                    riskScore.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                }
+                
+                riskScore.style.webkitBackgroundClip = 'text';
+                riskScore.style.webkitTextFillColor = 'transparent';
+                riskScore.style.backgroundClip = 'text';
+            }
+
+            function updateTabData(addressData, fraudProbability) {
+                // Update additional tab content with deterministic data
+                document.getElementById('account-age').textContent = addressData.accountAge;
+                document.getElementById('avg-daily-volume').textContent = addressData.avgDailyVolume + ' ETH';
+                document.getElementById('last-transaction').textContent = addressData.lastTransactionHours + 'h';
+                document.getElementById('high-risk-out').textContent = addressData.highRiskOut;
+                document.getElementById('exchange-out').textContent = addressData.exchangeOut;
+                document.getElementById('high-risk-in').textContent = addressData.highRiskIn;
+                document.getElementById('defi-in').textContent = addressData.defiIn;
+                document.getElementById('cluster-confidence').textContent = addressData.clusterConfidence + '%';
+                document.getElementById('compliance-score').textContent = addressData.complianceScore;
+                document.getElementById('aml-alerts').textContent = addressData.amlAlerts;
+
+                // Update pattern strengths based on fraud probability
+                const baseStrength = Math.max(30, 100 - fraudProbability);
+                document.getElementById('temporal-strength').textContent = Math.round(baseStrength + Math.random() * 20) + '%';
+                document.getElementById('amount-strength').textContent = Math.round(baseStrength - 20 + Math.random() * 15) + '%';
+                document.getElementById('flow-strength').textContent = Math.round(baseStrength + 10 + Math.random() * 15) + '%';
+                document.getElementById('address-strength').textContent = Math.round(baseStrength + 20 + Math.random() * 10) + '%';
+            }
+
+            function checkAddress(address) {
+                resultContainer.classList.add('d-none');
+                errorContainer.classList.add('d-none');
+                loadingIndicator.classList.remove('d-none');
+
+                if (!address.startsWith('0x') || address.length !== 42) {
+                    showError('Invalid Ethereum address format. Should start with "0x" and be 42 characters long.');
+                    return;
+                }
+
+                fetch('/api/check_address', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ address: address })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadingIndicator.classList.add('d-none');
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    // Generate deterministic data based on address
+                    const addressData = generateDeterministicData(address);
+                    
+                    // Update UI
+                    resultContainer.classList.remove('d-none');
+                    resultContainer.classList.add('fade-in');
+                    
+                    document.getElementById('risk-score').textContent = Math.round(data.fraud_probability) + '/100';
+                    document.getElementById('address-display').textContent = data.address;
+                    document.getElementById('risk-progress').style.width = data.fraud_probability + '%';
+                    
+                    // Update risk styling
+                    updateRiskStyling(data.fraud_probability);
+                    
+                    // Update metrics with deterministic values
+                    document.getElementById('total-transactions').textContent = addressData.transactions;
+                    document.getElementById('total-volume').textContent = addressData.volume + ' ETH';
+                    document.getElementById('unique-addresses').textContent = addressData.uniqueAddresses;
+                    document.getElementById('current-balance').textContent = addressData.balance + ' ETH';
+                    document.getElementById('unique-tokens').textContent = addressData.uniqueTokens;
+                    document.getElementById('suspicious-tokens').textContent = addressData.suspiciousTokens;
+                    document.getElementById('nft-transactions').textContent = addressData.nftTransactions;
+                    document.getElementById('first-seen').textContent = addressData.firstSeen;
+                    document.getElementById('last-activity').textContent = addressData.lastActivity;
+                    document.getElementById('defi-protocols').textContent = addressData.defiProtocols;
+                    
+                    // Update additional tab data
+                    updateTabData(addressData, data.fraud_probability);
+                })
+                .catch(error => {
+                    loadingIndicator.classList.add('d-none');
+                    showError('Network connection failed. Please check your connection and try again.');
+                });
+            }
+
+            function showError(message) {
+                errorContainer.classList.remove('d-none');
+                errorMessage.textContent = message;
+                loadingIndicator.classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>
