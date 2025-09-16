@@ -21,3 +21,14 @@ A machine learning-powered web application that evaluates the fraud risk of Ethe
 ```bash
 git clone https://github.com/yourusername/ethereum-fraud-detector.git
 cd ethereum-fraud-detector
+```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Run the application:
+```bash
+python app.py
+```
+4. Open your browser at http://localhost:5000
+
