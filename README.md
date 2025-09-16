@@ -113,7 +113,6 @@ Each section provides specialized metrics and visualizations to support comprehe
 
 ---
 
-# Ethereum Fraud Detector
 
 ## Docker Setup
 
