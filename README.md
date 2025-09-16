@@ -41,10 +41,10 @@ python app.py
 
 ## Images
 
-![Alt text](path/to/image1.jpg)
+![Trail image](image1.jpg)
 
+![Alt text](image2.jpg)
 
-![Alt text](path/to/image2.jpg)
 ---
 ## User Interface
 
