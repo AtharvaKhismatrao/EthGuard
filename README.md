@@ -36,3 +36,28 @@ python app.py
 
 ## How it Works
 **Workflow:**
+  1. User Input: Enter an Ethereum address.
+  2. Backend Processing:
+    - Pre-trained LightGBM model is loaded.
+    - Features are extracted (transaction patterns, address stats, historical indicators).
+    - Risk probability is generated.
+  3. Frontend Output:
+    - Displays fraud probability %.
+    - Categorizes into Low, Medium, High Risk.
+---
+## Risk Levels
+- 🟢 Low/No Risk → Fraud Probability < 40%
+- 🟡 Medium Risk → Fraud Probability 40–70%
+- 🔴 High Risk → Fraud Probability > 70%
+---
+## Tech Stack
+- Backend: Flask (Python).
+- Frontend: HTML, CSS, JavaScript.
+- Machine Learning: LightGBM, Scikit-learn, Keras, XGBoost.
+- Data: Kaggle Ethereum Fraud Detection Dataset + Etherscan API.
+- Model Storage: lightgbm_fraud_model.pkl (pre-trained model).
+---
+## Future Improvements
+- Integrate live data from Ethereum blockchain (Web3.py).
+- Add Metamask wallet connection for real-time address checks.
+- Deploy as a cloud-based API (AWS / Azure / GCP).
