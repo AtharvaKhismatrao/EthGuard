@@ -32,3 +32,7 @@ python app.py
 ```
 4. Open your browser at http://localhost:5000
 
+---
+
+## How it Works
+**Workflow:**
