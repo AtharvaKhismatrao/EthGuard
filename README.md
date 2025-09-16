@@ -50,6 +50,19 @@ python app.py
 
 ---
 
+## Docker Setup
+
+Build the Docker image:
+```bash
+docker build -t ethereum-fraud-detector .
+```
+Run the container:
+```bash
+docker run -p 5000:5000 ethereum-fraud-detector
+```
+
+---
+
 ## Images
 
 ![Trail image](image1.jpg)
@@ -114,18 +127,6 @@ Each section provides specialized metrics and visualizations to support comprehe
 ---
 
 
-## Docker Setup
-
-Build the Docker image:
-```bash
-docker build -t ethereum-fraud-detector .
-```
-Run the container:
-```bash
-docker run -p 5000:5000 ethereum-fraud-detector
-```
-
----
 
 ## Future Improvements
 - Integrate live data from Ethereum blockchain using Web3.py
